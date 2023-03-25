@@ -1,5 +1,5 @@
-#ifndef INCLUDE_AKFSFSIM_SENSORS_H
-#define INCLUDE_AKFSFSIM_SENSORS_H
+#pragma once
+
 
 #include <random>
 #include <vector>
@@ -66,5 +66,3 @@ class LidarSensor
         double m_max_range;
         bool m_id_enabled;
 };
-
-#endif  // INCLUDE_AKFSFSIM_SENSORS_H

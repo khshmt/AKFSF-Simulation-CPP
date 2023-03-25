@@ -1,0 +1,9 @@
+{
+    "name": "akfsf",
+    "version-string": "1.0",
+    "dependencies": [
+      "eigen3",
+      "sdl2",
+      "sdl2-ttf"
+    ]
+}

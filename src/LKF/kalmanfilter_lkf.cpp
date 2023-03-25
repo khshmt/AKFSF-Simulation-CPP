@@ -12,8 +12,8 @@
 // -------------------------------------------------- //
 // YOU CAN USE AND MODIFY THESE CONSTANTS HERE
 constexpr bool INIT_ON_FIRST_PREDICTION = false;
-constexpr double INIT_POS_STD = 0.0;
-constexpr double INIT_VEL_STD = 15.0;
+constexpr double INIT_POS_STD = 10.0;
+constexpr double INIT_VEL_STD = 10.0;
 constexpr double ACCEL_STD = 0.1;
 constexpr double GPS_POS_STD = 3.0;
 // -------------------------------------------------- //
@@ -36,7 +36,7 @@ void KalmanFilter::predictionStep(double dt)
         // Assume the initial velocity is 5 m/s at 45 degrees (VX,VY) = (5*cos(45deg),5*sin(45deg)) m/s
         // state(2) = 5.f * cos(M_PI / 4);
         // state(3) = 5.f * sin(M_PI / 4);
-        state << 0.0f, 0.0f, 0.0f, 0.0f;
+        state << 0.0f, 0.0f, 0.0, 0.0/*(5.f * cos(M_PI / 4)), (5.f * sin(M_PI / 4))*/;
         cov(0, 0) = INIT_POS_STD * INIT_POS_STD;
         cov(1, 1) = INIT_POS_STD * INIT_POS_STD;
         cov(2, 2) = INIT_VEL_STD * INIT_VEL_STD;
@@ -55,7 +55,7 @@ void KalmanFilter::predictionStep(double dt)
         // Hint: You can use the constants: ACCEL_STD
         // ----------------------------------------------------------------------- //
         // ENTER YOUR CODE HERE
-        Eigen::Matrix4d F; // F is the system dynamic matrix
+        Eigen::Matrix4d F; // F is the system dynamics matrix
         F << 1.f, 0.f, dt, 0.f,
             0.f, 1.f, 0.f, dt,
             0.f, 0.f, 1.f, 0.f,
@@ -66,8 +66,8 @@ void KalmanFilter::predictionStep(double dt)
         Q(1, 1) = ACCEL_STD * ACCEL_STD;
 
         Eigen::Matrix<double, 4, 2> L; // L is the matrix that probagate the process model error
-        auto exp{0.5f * dt * dt};
-        L << exp, 0.f, 0.f, exp, dt, 0.f, 0.f, dt;
+        auto half_dt_2{0.5f * dt * dt};
+        L << half_dt_2, 0.f, 0.f, half_dt_2, dt, 0.f, 0.f, dt;
 
         state = F * state;
         cov = F * cov * F.transpose() + L * Q * L.transpose();

@@ -36,12 +36,12 @@ int main( int argc, char* args[] )
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
         std::cout << "SDL could not initialize! SDL_Error: " <<  SDL_GetError() << std::endl;
-        return -1;
+        return EXIT_FAILURE;
     }
     if( TTF_Init() == -1 )
     {
         std::cout << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
-        return -1;
+        return EXIT_FAILURE;
     }
 
     // Create Display
@@ -107,7 +107,7 @@ int main( int argc, char* args[] )
     TTF_Quit();
     SDL_Quit();
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 SimulationParams loadSimulation1Parameters()
