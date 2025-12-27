@@ -19,7 +19,7 @@ set(SRC_CPP_DEFAULT
 )
 
 add_library(LKF src/LKF/kalmanfilter_lkf.cpp include/kalmanfilter.h)
-target_link_libraries(LKF
+target_link_libraries(LKF PUBLIC
         $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
         $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
         $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
@@ -27,7 +27,7 @@ target_link_libraries(LKF
 )
 
 add_library(EKF src/EKF/kalmanfilter_ekf.cpp include/kalmanfilter.h)
-target_link_libraries(EKF
+target_link_libraries(EKF PUBLIC
         $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
         $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
         $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
@@ -35,7 +35,7 @@ target_link_libraries(EKF
 )
 
 add_library(UKF src/UKF/kalmanfilter_ukf.cpp include/kalmanfilter.h)
-target_link_libraries(UKF
+target_link_libraries(UKF PUBLIC
         $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
         $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
         $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
@@ -45,44 +45,26 @@ target_link_libraries(UKF
 add_executable(${PROJECT_NAME}_lkf
         ${SRC_CPP_DEFAULT}
 )
-target_link_libraries(${PROJECT_NAME}_lkf
-        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
-        $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
-        Eigen3::Eigen
-        LKF
-)
+target_link_libraries(${PROJECT_NAME}_lkf LKF)
 
 add_executable(${PROJECT_NAME}_ekf
         ${SRC_CPP_DEFAULT}
 )
-target_link_libraries(${PROJECT_NAME}_ekf
-        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
-        $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
-        Eigen3::Eigen
-        EKF
-)
+target_link_libraries(${PROJECT_NAME}_ekf EKF)
 
 add_executable(${PROJECT_NAME}_ukf
         ${SRC_CPP_DEFAULT}
 )
-target_link_libraries(${PROJECT_NAME}_ukf
-        $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-        $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
-        $<IF:$<TARGET_EXISTS:SDL2_ttf::SDL2_ttf>,SDL2_ttf::SDL2_ttf,SDL2_ttf::SDL2_ttf-static>
-        Eigen3::Eigen
-        UKF
-)
+target_link_libraries(${PROJECT_NAME}_ukf UKF)
 
 add_custom_command(TARGET ${PROJECT_NAME}_lkf PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}_lkf>)
+    ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-add_custom_command(TARGET ${PROJECT_NAME}_ekf PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}_ekf>)
-    
-add_custom_command(TARGET ${PROJECT_NAME}_ukf PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}_ukf>)
+#add_custom_command(TARGET ${PROJECT_NAME}_ekf PRE_BUILD
+#    COMMAND ${CMAKE_COMMAND} -E copy_directory
+#    ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}_ekf>)
+#    
+#add_custom_command(TARGET ${PROJECT_NAME}_ukf PRE_BUILD
+#    COMMAND ${CMAKE_COMMAND} -E copy_directory
+#    ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}_ukf>)
