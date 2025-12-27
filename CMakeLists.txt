@@ -60,11 +60,3 @@ target_link_libraries(${PROJECT_NAME}_ukf UKF)
 add_custom_command(TARGET ${PROJECT_NAME}_lkf PRE_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/data/ ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-#add_custom_command(TARGET ${PROJECT_NAME}_ekf PRE_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory
-#    ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}_ekf>)
-#    
-#add_custom_command(TARGET ${PROJECT_NAME}_ukf PRE_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory
-#    ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:${PROJECT_NAME}_ukf>)
